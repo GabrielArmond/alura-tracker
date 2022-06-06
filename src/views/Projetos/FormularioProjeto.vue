@@ -21,6 +21,8 @@
 import { defineComponent } from "vue";
 import { useStore } from "@/store/index";
 import { ADICIONA_PROJETO, ALTERA_PROJETO } from "@/store/tipo-mutations";
+import { TipoNotificacao } from "@/interfaces/INotificacao";
+import useNotificador from "@/hooks/notificador";
 
 export default defineComponent({
   name: "FormularioProjeto",
@@ -44,22 +46,37 @@ export default defineComponent({
   },
   methods: {
     salvar() {
-      if (this.id) {
-        this.store.commit(ALTERA_PROJETO, {
-          id: this.id,
-          nome: this.nomeDoProjeto,
-        });
-      } else {
-        this.store.commit(ADICIONA_PROJETO, this.nomeDoProjeto);
+      if (this.nomeDoProjeto) {
+        if (this.id) {
+          this.store.commit(ALTERA_PROJETO, {
+            id: this.id,
+            nome: this.nomeDoProjeto,
+          });
+        } else {
+          this.store.commit(ADICIONA_PROJETO, this.nomeDoProjeto);
+        }
         this.nomeDoProjeto = "";
+        this.notificar(
+          TipoNotificacao.SUCESSO,
+          "Sucesso",
+          "Projeto salvo com sucesso!"
+        );
+        this.$router.push({ name: "Projetos" });
+      } else {
+        this.notificar(
+          TipoNotificacao.FALHA,
+          "Erro",
+          "Preencha o nome do Projeto"
+        );
       }
-      this.$router.push({ name: "Projetos" });
     },
   },
   setup() {
     const store = useStore();
+    const { notificar } = useNotificador();
     return {
       store,
+      notificar,
     };
   },
 });

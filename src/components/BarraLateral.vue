@@ -6,7 +6,7 @@
     <div class="has-text-centered">
       <button class="button" @click="alterarTema">{{ textoBotao }}</button>
     </div>
-    <nav class="panel mt-5">
+    <nav class="panel mt-5 has-text-left">
       <ul>
         <li>
           <router-link to="/" class="link">
@@ -37,15 +37,12 @@ export default defineComponent({
     };
   },
   computed: {
-    textoBotao() {
-      if (this.modoEscuroAtivo) {
-        return "Desativar modo escuro";
-      }
-      return "Ativar modo escuro";
+    textoBotao(): string {
+      return this.modoEscuroAtivo ? "Modo claro" : "Modo escuro";
     },
   },
   methods: {
-    alterarTema() {
+    alterarTema(): void {
       this.modoEscuroAtivo = !this.modoEscuroAtivo;
       this.$emit("aoTemaAlterado", this.modoEscuroAtivo);
     },

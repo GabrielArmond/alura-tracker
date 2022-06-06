@@ -43,10 +43,10 @@ export default defineComponent({
       }, 1000);
     },
     finalizar() {
-      this.cronometroRodando = false;
-      clearInterval(this.cronometro);
       this.$emit("aoTemporizadorFinalizado", this.tempoEmSegundos);
       this.tempoEmSegundos = 0;
+      this.cronometroRodando = false;
+      clearInterval(this.cronometro);
     },
   },
 });
