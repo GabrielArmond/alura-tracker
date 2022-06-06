@@ -1,8 +1,11 @@
 <template>
   <Box>
     <div class="columns">
-      <div class="column is-7">
+      <div class="column is-4">
         {{ tarefa.descricao || "Tarefa sem descrição" }}
+      </div>
+      <div class="column is-3">
+        {{ tarefa.projeto?.nome || "N/D" }}
       </div>
       <div class="column">
         <Cronometro :tempoEmSegundos="tarefa.duracaoEmSegundos" />
@@ -19,15 +22,22 @@ import Box from "./BoxTracker.vue";
 
 export default defineComponent({
   name: "TarefaTracker",
+  components: {
+    Cronometro,
+    Box,
+  },
   props: {
     tarefa: {
       type: Object as PropType<ITarefa>,
       required: true,
     },
   },
-  components: {
-    Cronometro,
-    Box,
+  computed: {
+    tempoGasto(): string {
+      return new Date(this.tarefa.duracaoEmSegundos * 1000)
+        .toISOString()
+        .substr(11, 8);
+    },
   },
 });
 </script>

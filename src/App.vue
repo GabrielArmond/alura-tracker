@@ -7,46 +7,29 @@
       <BarraLateral @aoTemaAlterado="trocarTema" />
     </div>
     <div class="column is-three-quarter conteudo">
-      <Formulario @aoSalvarTarefa="salvarTarefa" />
-      <div class="lista">
-        <Tarefa v-for="(tarefa, i) in tarefas" :key="i" :tarefa="tarefa" />
-        <Box v-if="listaEstaVazia"> Você não está muito produtivo hoje :( </Box>
-      </div>
+      <Notificacoes />
+      <router-view></router-view>
     </div>
   </main>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Box from "@/components/BoxTracker.vue";
-import ITarefa from "./interfaces/ITarefa";
-import Tarefa from "@/components/TarefaTracker.vue";
+import Notificacoes from "@/components/NotificacoesTracker.vue";
 import BarraLateral from "@/components/BarraLateral.vue";
-import Formulario from "@/components/FormularioTracker.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     BarraLateral,
-    Formulario,
-    Tarefa,
-    Box,
+    Notificacoes,
   },
   data() {
     return {
-      tarefas: [] as ITarefa[],
       modoEscuroAtivo: false,
     };
   },
-  computed: {
-    listaEstaVazia(): boolean {
-      return this.tarefas.length === 0;
-    },
-  },
   methods: {
-    salvarTarefa(tarefa: ITarefa) {
-      this.tarefas.push(tarefa);
-    },
     trocarTema(modoEscuroAtivo: boolean) {
       this.modoEscuroAtivo = modoEscuroAtivo;
     },
@@ -55,10 +38,6 @@ export default defineComponent({
 </script>
 
 <style>
-.lista {
-  padding: 1.25rem;
-}
-
 main {
   --bg-primario: #fff;
   --texto-primario: #000;
