@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import Cronometro from "./CronometroTracker.vue";
 import Botao from "./BotaoTracker.vue";
 
@@ -28,26 +28,34 @@ export default defineComponent({
     Cronometro,
     Botao,
   },
-  data() {
-    return {
-      tempoEmSegundos: 0,
-      cronometro: 0,
-      cronometroRodando: false,
-    };
-  },
-  methods: {
-    iniciar() {
-      this.cronometroRodando = true;
-      this.cronometro = setInterval(() => {
-        this.tempoEmSegundos += 1;
+
+  setup(props, { emit }) {
+    const tempoEmSegundos = ref(0);
+    const cronometro = ref(0);
+    const cronometroRodando = ref(false);
+
+
+    const iniciar = () => {
+      cronometroRodando.value = true;
+      cronometro.value = setInterval(() => {
+        tempoEmSegundos.value += 1;
       }, 1000);
-    },
-    finalizar() {
-      this.$emit("aoTemporizadorFinalizado", this.tempoEmSegundos);
-      this.tempoEmSegundos = 0;
-      this.cronometroRodando = false;
-      clearInterval(this.cronometro);
-    },
-  },
+    }
+
+    const finalizar = () => {
+      emit("aoTemporizadorFinalizado", tempoEmSegundos.value);
+      tempoEmSegundos.value = 0;
+      cronometroRodando.value = false;
+      clearInterval(cronometro.value);
+    }
+ 
+    return {
+      tempoEmSegundos,
+      cronometro,
+      cronometroRodando,
+      iniciar,
+      finalizar
+    }
+  }
 });
 </script>
