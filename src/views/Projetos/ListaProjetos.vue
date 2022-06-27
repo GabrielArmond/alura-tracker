@@ -39,24 +39,24 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 import { useStore } from "@/store/index";
-import { EXCLUIR_PROJETO } from "@/store/tipo-mutations";
+import { OBTER_PROJETOS, REMOVER_PROJETO } from "@/store/tipo-acoes";
 
 export default defineComponent({
   name: "ListaTracker",
-
-  data() {
-    return {};
-  },
-  methods: {
-    excluir(id: string) {
-      this.store.commit(EXCLUIR_PROJETO, id);
-    },
-  },
   setup() {
     const store = useStore();
+    
+    const projetos = computed(() => store.state.projeto.projetos)
+
+    store.dispatch(OBTER_PROJETOS);
+
+    const excluir = (id: string) => {
+      store.dispatch(REMOVER_PROJETO, id);
+    }
+    
     return {
-      store,
-      projetos: computed(() => store.state.projetos),
+      excluir,
+      projetos
     };
   },
 });
